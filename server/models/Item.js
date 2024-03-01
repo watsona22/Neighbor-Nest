@@ -3,7 +3,7 @@ import { Schema, model } from 'mongoose'
 const itemSchema = new Schema({
     name: {
         type: String,
-        required: true
+        required: true,
     },
     price: {
         type: Number,
@@ -13,8 +13,9 @@ const itemSchema = new Schema({
         type: String,
         required: true,
     },
-})
 
-const Item = model('Item', itemSchema)
+});
+
+const Item = model('Item', itemSchema);
 
 export default Item
