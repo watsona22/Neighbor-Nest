@@ -1,7 +1,7 @@
 // import user model
-const { User } = require('../models');
+import { User } from '../models';
 // import sign token function from auth
-const { signToken } = require('../utils/auth');
+import { signToken } from '../utils/auth';
 
 module.exports = {
 

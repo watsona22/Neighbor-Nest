@@ -1,13 +1,15 @@
-const express = require('express');
-const { ApolloServer } = require('apollo-server-express');
-const mongoose = require('mongoose');
+import express from 'express';
+import { ApolloServer } from 'apollo-server-express';
+import mongoose from 'mongoose';
 
-const typeDefs = require('./graphql/schema');
-const resolvers = require('./graphql/resolvers');
+// import typeDefs from './schemas/';
+import resolvers from './schemas/resolvers.js';
 
 // Importing Mongoose models
-const Item = require('./models/item');
-const User = require('./models/user');
+import Item from './models/Item.js';
+import User from './models/User.js';
+import Category from './models/Category.js';
+import Order from './models/Order.js';
 
 const app = express();
 
@@ -19,11 +21,13 @@ mongoose.connect('mongodb://localhost:27017/your-database-name', { useNewUrlPars
 // Provide the Mongoose models to the resolvers
 const models = {
     Item,
-    User
+    User,
+    Category,
+    Order,
 };
 
 const server = new ApolloServer({
-    typeDefs,
+    // typeDefs,
     resolvers,
     context: () => ({ models }) // Provide the models to the resolvers
 });
