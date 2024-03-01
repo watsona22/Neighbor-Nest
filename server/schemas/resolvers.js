@@ -1,52 +1,52 @@
 import { AuthenticationError } from 'apollo-server-express';
-import { User, Item, Category, Order} from '../models/index';
-const stripe = require('stripe')('sk_test_4eC39HqLyjWDarjtT1zdp7dc');
+import { User } from '../models/index.js';
+// import stripe from 'stripe';
 
 const resolvers = {
     Query: {
         categories: async () => {
             return await Category.find();
         },
-        items: async (parent, { category, name}) =>{
+        items: async (parent, { category, name }) => {
             const params = {}
 
-            if(category) {
+            if (category) {
                 params.category = category
             }
-             if (name) {
+            if (name) {
                 params.name = name
-             };
-             return await Item.find(params).populate('category')
+            };
+            return await Item.find(params).populate('category')
         },
-        item: async (parent, {_id}) => {
+        item: async (parent, { _id }) => {
             return await Item.findById(_id).populate('category');
         },
-        user: async (parent, args, context ) => {
-            if(context.user) {
+        user: async (parent, args, context) => {
+            if (context.user) {
                 const user = await User.findById(context.user._id).populate({
                     path: 'orders.items',
                     populate: 'category'
                 });
 
-                user.orders.sort((a,b)=> b.purchaseDate - a.purchaseDate);
+                user.orders.sort((a, b) => b.purchaseDate - a.purchaseDate);
 
                 return user;
             }
-            
+
             throw new AuthenticationError
         },
         checkout: async (parent, args, context) => {
             const url = new URL(context.headers.referer).origin;
             const order = new Order({ items: args.items });
             const line_items = []
-            
+
             const { products } = await order.populate('products');
 
-            for(i = 0; i < products.length; ++i) {
+            for (i = 0; i < products.length; ++i) {
                 const product = await stripe.products.create({
                     name: products[i].name,
                     description: products[i].description,
-                    image:  [`${url}/images/${products[i].image}`]
+                    image: [`${url}/images/${products[i].image}`]
                 });
 
                 const price = await stripe.prices.create({
@@ -69,15 +69,15 @@ const resolvers = {
                 cancel_url: `${url}/`
             });
 
-            return { session: session.id}
+            return { session: session.id }
         }
     },
     Mutation: {
         addUser: async (parent, { products }, context) => {
-            if(context.user) {
-                const order = new Order({ products});
+            if (context.user) {
+                const order = new Order({ products });
 
-                await User.findByIdAndUpdate(context.user._id, {$push: {orders: order} });
+                await User.findByIdAndUpdate(context.user._id, { $push: { orders: order } });
 
                 return order;
             }
@@ -85,33 +85,33 @@ const resolvers = {
             throw AuthenticationError;
         },
         updateUser: async (parent, args, context) => {
-            if(context.user) {
-                return await User.findByIdAndUpdate(context.user._id, args, {new: true});
+            if (context.user) {
+                return await User.findByIdAndUpdate(context.user._id, args, { new: true });
             }
 
             throw AuthenticationError
         },
-        updateProduct: async (parent, {_id, quantity} ) => {
+        updateProduct: async (parent, { _id, quantity }) => {
             const decrement = Math.abs(quantity) * -1;
 
-            return await Item.findByIdAndUpdate(_id, {$inc: {quantity: decrement} }, {new: true});
+            return await Item.findByIdAndUpdate(_id, { $inc: { quantity: decrement } }, { new: true });
         },
-        login: async (parent, {email, password}) => {
-             const user = await User.findOne({ email  });
+        login: async (parent, { email, password }) => {
+            const user = await User.findOne({ email });
 
-             if (!user) {
+            if (!user) {
                 throw AuthenticationError;
-             }
+            }
 
-             const correctPw = await user.isCorrectPassword(password);
+            const correctPw = await user.isCorrectPassword(password);
 
-             if(!correctPw) {
+            if (!correctPw) {
                 throw AuthenticationError;
-             }
+            }
 
-             const token = signToken(user);
+            const token = signToken(user);
 
-             return { token, user };
+            return { token, user };
         }
     }
 };
