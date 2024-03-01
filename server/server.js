@@ -5,16 +5,27 @@ const mongoose = require('mongoose');
 const typeDefs = require('./graphql/schema');
 const resolvers = require('./graphql/resolvers');
 
+// Importing models
+const Item = require('./models/item');
+const User = require('./models/user');
+
 const app = express();
 
-// Waiting for database name
+// Waiting on database name
 // mongoose.connect('mongodb://localhost:27017/your-database-name', { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('MongoDB connected'))
     .catch(err => console.error(err));
 
+// Mongoose models
+const models = {
+    Item,
+    User
+};
+
 const server = new ApolloServer({
     typeDefs,
-    resolvers
+    resolvers,
+    context: () => ({ models }) // Provide the models to the resolvers
 });
 
 server.applyMiddleware({ app });
