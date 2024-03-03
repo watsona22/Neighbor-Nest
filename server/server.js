@@ -1,41 +1,44 @@
-import express from 'express';
-import { ApolloServer } from 'apollo-server-express';
-import mongoose from 'mongoose';
+const express = require('express');
+const { ApolloServer} = require('@apollo/server');
+const {expressMiddleware} = require('@apollo/server/express4');
+const path = require('path');
+const Auth = require('./utils/auth.js');
+const { typeDefs, resolvers } = require('./schemas/index.js');
+const db = require('./config/connection.js');
 
-// import typeDefs from './schemas/';
-import resolvers from './schemas/resolvers.js';
 
-// Importing Mongoose models
-import Item from './models/Item.js';
-import User from './models/User.js';
-import Category from './models/Category.js';
-import Order from './models/Order.js';
-
+const PORT = process.env.PORT || 3001;
 const app = express();
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+}); 
 
-// Connect to MongoDB
-mongoose.connect('mongodb://localhost:27017/your-database-name', { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => console.log('MongoDB connected'))
-    .catch(err => console.error(err));
+const startApolloServer = async () => {
+  await server.start();
+  
+  app.use(express.urlencoded({ extended: true }));
+  app.use(express.json());
+  
+  app.use('/graphql', expressMiddleware(server, {
+    context: Auth.authMiddleware
+  }));
 
-// Provide the Mongoose models to the resolvers
-const models = {
-    Item,
-    User,
-    Category,
-    Order,
+  
+  if (process.env.NODE_ENV === 'production') {
+    app.use(express.static(path.join(__dirname, '../client/dist')));
+
+    app.get('*', (req, res) => {
+      res.sendFile(path.join(__dirname, '../client/dist/index.html'));
+    });
+  } 
+
+  db.once('open', () => {
+    app.listen(PORT, () => {
+      console.log(`API server running on port ${PORT}!`);
+      console.log(`Use GraphQL at http://localhost:${PORT}/graphql`);
+    });
+  });
 };
 
-const server = new ApolloServer({
-    // typeDefs,
-    resolvers,
-    context: () => ({ models }) // Provide the models to the resolvers
-});
-
-server.applyMiddleware({ app });
-
-const PORT = process.env.PORT || 4000;
-
-app.listen(PORT, () => {
-    console.log(`Server listening on port ${PORT}`);
-});
+startApolloServer();

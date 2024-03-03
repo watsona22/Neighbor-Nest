@@ -1,4 +1,4 @@
-import {Schema, model } from 'mongoose';
+const { Schema, model } = require('mongoose');
 
 const orderSchema = new Schema({
     purchaseDate: {
@@ -15,4 +15,4 @@ const orderSchema = new Schema({
 
 const Order = model('Order', orderSchema)
 
-export default Order;
+module.exports = Order
