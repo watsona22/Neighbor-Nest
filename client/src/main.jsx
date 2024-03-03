@@ -4,19 +4,19 @@ import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import Signup from '../src/pages/Signup.jsx'
 import Login from '../src/pages/Login.jsx'
-import Home from '../src/pages/Home.jsx'
-import ErrorPage from '../src/pages/ErrorPage'
+// import Home from '../src/pages/Home.jsx'
+// import ErrorPage from '../src/pages/ErrorPage'
 import './index.css'
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
-    errorElement: <ErrorPage />,
+    // errorElement: <ErrorPage />,
     children: [
       {
         index: true,
-        element: <Home />
+        element: <App />
       }, {
         path: '/login',
         element: <Login />

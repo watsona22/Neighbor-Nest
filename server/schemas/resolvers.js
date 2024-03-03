@@ -1,5 +1,5 @@
-import { AuthenticationError } from 'apollo-server-express';
-import { User } from '../models/index.js';
+const Auth = require('../utils/auth.js')
+const { User } = require('../models/index.js');
 // import stripe from 'stripe';
 
 const resolvers = {
@@ -33,7 +33,7 @@ const resolvers = {
                 return user;
             }
 
-            throw new AuthenticationError
+            throw new Auth.AuthenticationError
         },
         checkout: async (parent, args, context) => {
             const url = new URL(context.headers.referer).origin;
@@ -73,46 +73,57 @@ const resolvers = {
         }
     },
     Mutation: {
-        addUser: async (parent, { products }, context) => {
-            if (context.user) {
-                const order = new Order({ products });
+        addUser: async (parent, args, context) => {
+            const user = await User.create({ 
+                name: args.name,
+                 username: args.username,
+                  email: args.email,
+                   password: args.password
+                })
+                const token = Auth.signToken(user);
+                return { user, token}
 
-                await User.findByIdAndUpdate(context.user._id, { $push: { orders: order } });
-
-                return order;
-            }
-
-            throw AuthenticationError;
         },
+        // addUser: async (parent, { products }, context) => {
+        //     if (context.user) {
+        //         const order = new Order({ products });
+
+        //         await User.findByIdAndUpdate(context.user._id, { $push: { orders: order } });
+
+        //         return order;
+        //     }
+
+        //     throw AuthenticationError;
+        // },
         updateUser: async (parent, args, context) => {
             if (context.user) {
                 return await User.findByIdAndUpdate(context.user._id, args, { new: true });
             }
 
-            throw AuthenticationError
+            throw Auth.AuthenticationError
         },
-        updateProduct: async (parent, { _id, quantity }) => {
-            const decrement = Math.abs(quantity) * -1;
+        // updateProduct: async (parent, { _id, quantity }) => {
+        //     const decrement = Math.abs(quantity) * -1;
 
-            return await Item.findByIdAndUpdate(_id, { $inc: { quantity: decrement } }, { new: true });
-        },
+        //     return await Item.findByIdAndUpdate(_id, { $inc: { quantity: decrement } }, { new: true });
+        // },
         login: async (parent, { email, password }) => {
             const user = await User.findOne({ email });
 
             if (!user) {
-                throw AuthenticationError;
+                throw Auth.AuthenticationError
             }
 
             const correctPw = await user.isCorrectPassword(password);
 
             if (!correctPw) {
-                throw AuthenticationError;
+                throw Auth.AuthenticationError
             }
 
-            const token = signToken(user);
+            const token = Auth.signToken(user);
 
             return { token, user };
         }
     }
 };
-export default resolvers;
+module.exports = resolvers
