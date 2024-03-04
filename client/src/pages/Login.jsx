@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 import { LOGIN_USER } from '../utils/mutations';
 
-// import Auth from '../utils/auth';
+import Auth from '../utils/auth';
 
 const Login = () => {
     const [formState, setFormState] = useState({ email: '', password: '' });
@@ -29,7 +29,7 @@ const Login = () => {
                 variables: { ...formState },
             });
             //call login function with the created token. token is stored in local storage
-            // Auth.login(data.login.token);
+            Auth.login(data.login.token);
         } catch (e) {
             console.error(e);
         }

@@ -1,5 +1,6 @@
 const Auth = require('../utils/auth.js')
-const { User } = require('../models/index.js');
+
+const { User, Item, Category, Order } = require('../models/index.js');
 // import stripe from 'stripe';
 
 const resolvers = {
@@ -74,14 +75,21 @@ const resolvers = {
     },
     Mutation: {
         addUser: async (parent, args, context) => {
-            const user = await User.create({ 
-                name: args.name,
-                 username: args.username,
-                  email: args.email,
-                   password: args.password
+            console.log(args);
+            try {
+
+                const user = await User.create({
+                    name: `${args.firstName} ${args.lastName}`,
+                    username: args.firstName,
+                    email: args.email,
+                    password: args.password
                 })
                 const token = Auth.signToken(user);
-                return { user, token}
+                return { user, token }
+            } catch (err) {
+                console.log(err);
+
+            }
 
         },
         // addUser: async (parent, { products }, context) => {
@@ -109,12 +117,13 @@ const resolvers = {
         // },
         login: async (parent, { email, password }) => {
             const user = await User.findOne({ email });
-
+            console.log(email);
+            console.log(user);
             if (!user) {
                 throw Auth.AuthenticationError
             }
-
             const correctPw = await user.isCorrectPassword(password);
+            console.log(correctPw);
 
             if (!correctPw) {
                 throw Auth.AuthenticationError
