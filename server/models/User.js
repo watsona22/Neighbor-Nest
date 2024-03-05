@@ -1,14 +1,14 @@
-import { Schema, model} from 'mongoose';
+const { Schema, model } = require('mongoose');
+const bcrypt = require('bcrypt');
 
 const userSchema = new Schema({
-    name: {
+    firstName: {
         type: String,
         required: true,
     },
-    username: {
+    lastName: {
         type: String,
         required: true,
-        unique: true,
     },
     email: {
         type: String,
@@ -17,10 +17,30 @@ const userSchema = new Schema({
     },
     password: {
         type: String,
-        required: true,      
+        required: true,
+
     },
+    orders: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Order'
+        }
+    ],
+}, {
+    toJSON: { virtuals: true }
+});
+userSchema.methods.isCorrectPassword = async function (password) {
+    return bcrypt.compare(password, this.password)
+
+}
+userSchema.pre('save', async function (next) {
+    if (this.isNew || this.isModified('password')) {
+        const saltRounds = 10;
+        this.password = await bcrypt.hash(this.password, saltRounds);
+    }
+    next();
 });
 
 const User = model('User', userSchema)
 
-export default User;
+module.exports = User

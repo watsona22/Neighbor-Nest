@@ -1,0 +1,54 @@
+.shop-by-cat-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  width: 60%;
+  gap: 40px;
+
+  margin-bottom: 100px;
+}
+
+.shop-by-cat-container div {
+  position: relative;
+}
+
+.shop-by-cat-container h4 {
+  position: absolute;
+  top: 40%;
+
+
+  font-family: "Barlow", sans-serif;
+  font-weight: 500;
+  font-style: normal;
+  font-size: 20px;
+  color: rgba(255, 255, 255, 0.893);
+  text-align: center;
+  
+  background-color: rgba(0, 0, 0, 0.479);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 75px;
+  width: 100%;
+
+  z-index: 1;
+}
+
+.shop-by-cat-container div:hover img{
+  opacity: 1;
+}
+
+.shop-by-cat-container img {
+  height: 200px;
+  width: 140px;
+
+  border-radius: 10px;
+  opacity: 0.7;
+}
+
+.shop-by-cat-container img:hover {
+  opacity: 1;
+}
