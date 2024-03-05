@@ -25,8 +25,12 @@ function Header() {
         />
       </div>
       <div className="login-container">
-        <h3>Login</h3>
-        <h3>Sign-Up</h3>
+        <Link to="login">
+          <h3>Login</h3>
+        </Link>
+        <Link to="/sign-up">
+          <h3>Sign-Up</h3>
+        </Link>
       </div>
 
       

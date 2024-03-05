@@ -1,6 +1,5 @@
 import { useState, useRef, useEffect } from "react";
 import DropDownCategories from "./DropDownCategories";
-import '../styles/categoryDropDown.css'
 
 
 function CategoryDropDown() {

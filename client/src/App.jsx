@@ -1,5 +1,6 @@
-import { useState, createContext, useEffect } from "react";
+import { createContext, useEffect } from "react";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { ApolloClient, InMemoryCache, ApolloProvider, gql } from '@apollo/client';
 import "./App.css";
 
 
@@ -9,6 +10,8 @@ import Footer from "./components/Footer";
 import CategoryPage from './pages/CategoryPage';
 import ContactPage from "./pages/ContactPage";
 import AboutUs from "./pages/AboutUs";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
 
 import carImage from './assets/car.jpg'
 import clothingImage from './assets/clothing.jpg'
@@ -46,29 +49,38 @@ function ScrollToTop() {
 
 export const Context = createContext();
 
+const client = new ApolloClient({
+  uri: 'http://localhost:3001/graphql',
+  cache: new InMemoryCache(),
+});
+
 function App() {
 
 
   return (
-    <Context.Provider value={categories}>
-      <div className="main-container">
-        <BrowserRouter>
-          <Header />
-          <div className="pages">
-            <ScrollToTop />
-            <Routes>
-              <Route path="/" element={<Homepage />} />
-              {categories.map((category, index) => {
-                return <Route path={category.link} element={<CategoryPage key={index} index={index}/>}/>
-              })}
-              <Route path="/contact" element={<ContactPage />} />
-              <Route path="/about-us" element={<AboutUs />} />
-            </Routes>
-          </div>
-          <Footer />
-        </BrowserRouter>
-      </div>
-    </Context.Provider>
+    <ApolloProvider client={client}>
+      <Context.Provider value={categories}>
+        <div className="main-container">
+          <BrowserRouter>
+            <Header />
+            <div className="pages">
+              <ScrollToTop />
+              <Routes>
+                <Route path="/" element={<Homepage />} />
+                {categories.map((category, index) => {
+                  return <Route path={category.link} element={<CategoryPage key={index} index={index}/>}/>
+                })}
+                <Route path="/contact" element={<ContactPage />} />
+                <Route path="/about-us" element={<AboutUs />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/sign-up" element={<Signup />} />
+              </Routes>
+            </div>
+            <Footer />
+          </BrowserRouter>
+        </div>
+      </Context.Provider>
+    </ApolloProvider>
   );
 }
 
