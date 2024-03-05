@@ -1,7 +1,6 @@
 const User = require('./User.js');
+const Item = require('./Item.js')
+const Category = require('./Category.js')
+const Order = require('./Order.js')
 
-// import Item from './Item.js';
-// import Category from './Category.js';
-// import Order from './Order.js';
-
-module.exports = User
+module.exports = { User, Item, Category, Order };
