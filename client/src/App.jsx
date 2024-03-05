@@ -50,7 +50,7 @@ function ScrollToTop() {
 export const Context = createContext();
 
 const client = new ApolloClient({
-  uri: 'http://localhost:3001/graphql',
+  uri: '/graphql',
   cache: new InMemoryCache(),
 });
 

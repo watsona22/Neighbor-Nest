@@ -27,7 +27,7 @@ const Signup = () => {
 
     // submit form
     const handleFormSubmit = async (event) => {
-        // event.preventDefault();
+        event.preventDefault();
         console.log(formState);
 
         try {
@@ -35,7 +35,7 @@ const Signup = () => {
                 variables: { ...formState },
             });
 
-            Auth.login(data.addProfile.token);
+            Auth.login(data.addUser.token);
         } catch (e) {
             console.error(e);
         }
