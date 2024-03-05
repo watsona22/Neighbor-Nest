@@ -23,11 +23,11 @@ const Login = () => {
 
     // submit form
     const handleFormSubmit = async (event) => {
-        // event.preventDefault();
+        event.preventDefault();
         console.log(formState);
         try {
             const { data } = await login({
-                variables: { email, password },
+                variables: { ...formState },
             });
             //call login function with the created token. token is stored in local storage
             Auth.login(data.login.token);

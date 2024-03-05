@@ -20,8 +20,8 @@ const typeDefs = `
 
   type User {
     _id: ID!
-    name: String!
-    username: String!
+    firstName: String
+    lastName: String
     email: String!
     orders: [Order]
   }
