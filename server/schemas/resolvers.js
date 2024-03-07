@@ -24,14 +24,14 @@ const resolvers = {
         },
         user: async (parent, args, context) => {
             // if (context.user) {
-                const user = await User.findById('65e9106f6b1fa76f415fa0c4').populate({
-                    path: 'orders.items',
-                    populate: 'category'
-                });
+            const user = await User.findById('65e9106f6b1fa76f415fa0c4').populate({
+                path: 'orders.items',
+                populate: 'category'
+            });
 
-                user.orders.sort((a, b) => b.purchaseDate - a.purchaseDate);
+            user.orders.sort((a, b) => b.purchaseDate - a.purchaseDate);
 
-                return user;
+            return user;
             // }
 
             throw new Auth.AuthenticationError
@@ -92,23 +92,30 @@ const resolvers = {
             }
 
         },
-        // addUser: async (parent, { products }, context) => {
-        //     if (context.user) {
-        //         const order = new Order({ products });
-
-        //         await User.findByIdAndUpdate(context.user._id, { $push: { orders: order } });
-
-        //         return order;
-        //     }
-
-        //     throw AuthenticationError;
-        // },
         updateUser: async (parent, args, context) => {
             if (context.user) {
                 return await User.findByIdAndUpdate(context.user._id, args, { new: true });
             }
 
             throw Auth.AuthenticationError
+        },
+        addItem: async (parent, args) => {
+            console.log(args)
+            try {
+                const item = await Item.create({
+                    name: args.name,
+                    price: args.price,
+                    description: args.description
+                })
+                console.log(item)
+                console.log(args.name)
+                return item;
+            } catch (err) {
+                console.log(err);
+                throw new Error('Failed to add item. Please try again later.');
+
+            }
+
         },
         // updateProduct: async (parent, { _id, quantity }) => {
         //     const decrement = Math.abs(quantity) * -1;
