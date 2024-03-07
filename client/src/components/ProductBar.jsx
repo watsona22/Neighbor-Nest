@@ -2,15 +2,33 @@ import Slider from "react-slick";
 import placeholderImage from "../assets/placeholderImage.jpg";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import art from "../assets/art.jpg";
+import car from "../assets/car.jpg";
+import clothing from "../assets/clothing.jpg";
+import dog from "../assets/dog.jpg";
+import electronics from "../assets/electronics.webp";
+import home from "../assets/home.jpg";
+import industry from "../assets/industry.avif";
+import jewelry from "../assets/jewelry.jpg";
+import other from "../assets/other.jpeg";
+import sports from "../assets/sports.jpg";
+
+
 
 function ProductBar() {
   const images = [
-    placeholderImage,
-    placeholderImage,
-    placeholderImage,
-    placeholderImage,
-    placeholderImage,
-    placeholderImage,
+    art,
+    car,
+    clothing,
+    dog,
+    electronics,
+    home,
+    industry,
+    jewelry,
+    other,
+    sports,
+
+
   ];
 
   const settings = {
