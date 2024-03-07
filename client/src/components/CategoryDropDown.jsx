@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import DropDownCategories from "./DropDownCategories";
 
 
+
 function CategoryDropDown() {
   const [dropdown, setDropdown] = useState(false)
   const divRef = useRef(null)
