@@ -74,13 +74,13 @@ const resolvers = {
         }
     },
     Mutation: {
-        addUser: async (parent, args, context) => {
+        addUser: async (parent, args) => {
             console.log(args);
             try {
 
                 const user = await User.create({
-                    name: `${args.firstName} ${args.lastName}`,
-                    username: args.firstName,
+                    firstName: args.firstName,
+                    lastName: args.lastName,
                     email: args.email,
                     password: args.password
                 })
