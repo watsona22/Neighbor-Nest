@@ -26,3 +26,15 @@ export const LOGIN_USER = gql`
     }
   }
 `;
+
+export const ADD_ITEM = gql`
+mutation Mutation($description: String!, $name: String!, $price: Int) {
+  addItem(description: $description, name: $name, price: $price) {
+    name
+    price
+    description
+  }
+}
+`;
+export const REMOVE_ITEM = gql`
+`

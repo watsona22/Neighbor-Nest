@@ -18,8 +18,11 @@ const userSchema = new Schema({
     password: {
         type: String,
         required: true,
-
     },
+    Item: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Item'
+    }],
     orders: [
         {
             type: Schema.Types.ObjectId,

@@ -12,6 +12,9 @@ import industry from "../assets/industry.avif";
 import jewelry from "../assets/jewelry.jpg";
 import other from "../assets/other.jpeg";
 import sports from "../assets/sports.jpg";
+
+
+
 function CategoryPage(props) {
   const images = [
     art,
@@ -32,17 +35,20 @@ const links = [
   const categories = useContext(Context);
 
   return (
+    
     <div className="category-page-container">
       <h2>{categories[props.index].category}</h2>
       <div className="products-container">
         {images.map((image) => {
           return (
             <div>
-              <a href={links}>
-                <img src={image} alt="" />
+              <Link to="categoriesForSale.link">
+                <a href="">
+                  <img src={image} alt="" />
                 </a>
-              <p>Placeholder Name</p>
-              <h5>$100.92</h5>
+                <p>Placeholder Name</p>
+                <h5>$100.92</h5>
+              </Link>
             </div>
           );
         })}

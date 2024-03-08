@@ -68,9 +68,8 @@ function PostItem() {
         </label>
         <button type="submit">Post Item</button>
       </form>
-
-     
       <img src={svg} alt="SVG Image" />
+      
       
     </div>
   );

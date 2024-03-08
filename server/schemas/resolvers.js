@@ -92,17 +92,6 @@ const resolvers = {
             }
 
         },
-        // addUser: async (parent, { products }, context) => {
-        //     if (context.user) {
-        //         const order = new Order({ products });
-
-        //         await User.findByIdAndUpdate(context.user._id, { $push: { orders: order } });
-
-        //         return order;
-        //     }
-
-        //     throw AuthenticationError;
-        // },
         updateUser: async (parent, args, context) => {
             if (context.user) {
                 return await User.findByIdAndUpdate(context.user._id, args, { new: true });
@@ -110,11 +99,63 @@ const resolvers = {
 
             throw Auth.AuthenticationError
         },
-        // updateProduct: async (parent, { _id, quantity }) => {
-        //     const decrement = Math.abs(quantity) * -1;
+        addItem: async (parent, { userId, name, price, description }) => {
+            try {
+                const item = await Item.create({
+                    name,
+                    price,
+                    description,
+                    user: userId
+                })
+                return item;
+            } catch (err) {
+                console.log(err);
+                throw new Error('Failed to add item. Please try again later.');
 
-        //     return await Item.findByIdAndUpdate(_id, { $inc: { quantity: decrement } }, { new: true });
-        // },
+            }
+
+        },
+
+        removeItem: async (parent, { userId, itemId }) => {
+            try {
+                // Find the item to be removed
+                const item = await Item.findByIdAndDelete({ _id: itemId });
+                console.log(item)
+                if (!item) {
+                    throw new Error('Item not found.')
+                };
+
+                // Remove reference to user
+                await User.updateOne(
+                    { _id: userId },
+                    { $pull: { Item: itemId } } // Remove the itemId
+                );
+
+                return { success: true, message: 'Item removed.' };
+            } catch (error) {
+                console.error(error);
+                throw new Error('Failed to remove item.');
+            }
+        },
+        addOrder: async (parent, { userId, itemId }) => {
+            try {
+                // Validate input parameters
+                if (!userId || !itemId || !Array.isArray(itemId) || itemIds.length === 0) {
+                    throw new Error('Invalid input parameters.');
+                }
+
+                // Create the order
+                const order = await Order.create({
+                    user: userId, // Associate the order with the user
+                    items: itemId // Associate the order with the items
+                });
+
+                return order;
+            } catch (error) {
+                console.error(error);
+                throw new Error('Failed to add order.');
+            }
+        },
         login: async (parent, { email, password }) => {
             const user = await User.findOne({ email });
             console.log(email);
