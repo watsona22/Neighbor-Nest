@@ -7,6 +7,9 @@ const { typeDefs, resolvers } = require('./schemas/index.js');
 const db = require('./config/connection.js');
 
 
+
+
+
 const PORT = process.env.PORT || 3001;
 const app = express();
 const server = new ApolloServer({
@@ -23,7 +26,6 @@ const startApolloServer = async () => {
   app.use('/graphql', expressMiddleware(server, {
     context: Auth.authMiddleware
   }));
-
 
   if (process.env.NODE_ENV === 'production') {
     app.use(express.static(path.join(__dirname, '../client/dist')));
