@@ -99,16 +99,14 @@ const resolvers = {
 
             throw Auth.AuthenticationError
         },
-        addItem: async (parent, args) => {
-            console.log(args)
+        addItem: async (parent, { userId, name, price, description }) => {
             try {
                 const item = await Item.create({
-                    name: args.name,
-                    price: args.price,
-                    description: args.description
+                    name,
+                    price,
+                    description,
+                    user: userId
                 })
-                console.log(item)
-                console.log(args.name)
                 return item;
             } catch (err) {
                 console.log(err);
@@ -117,11 +115,49 @@ const resolvers = {
             }
 
         },
-        // updateProduct: async (parent, { _id, quantity }) => {
-        //     const decrement = Math.abs(quantity) * -1;
 
-        //     return await Item.findByIdAndUpdate(_id, { $inc: { quantity: decrement } }, { new: true });
-        // },
+        removeItem: async (parent, { userId, itemId }) => {
+
+            try {
+                // Find the item to be removed
+                const item = await Item.findOneAndDelete({ _id: itemId });
+                console.log(item)
+                if (!item) {
+                    throw new Error('Item not found.')
+                };
+
+                // Remove reference to user
+                await User.updateOne(
+                    { _id: item.userId },
+                    { $pull: { Item: itemId } } // Remove the itemId
+                );
+
+                return { success: true, message: 'Item removed.' };
+            } catch (error) {
+                console.error(error);
+                throw new Error('Failed to remove item.');
+            }
+        }
+        ,
+        addOrder: async (parent, { userId, itemId }) => {
+            try {
+                // Validate input parameters
+                if (!userId || !itemId || !Array.isArray(itemId) || itemIds.length === 0) {
+                    throw new Error('Invalid input parameters.');
+                }
+
+                // Create the order
+                const order = await Order.create({
+                    user: userId, // Associate the order with the user
+                    items: itemId // Associate the order with the items
+                });
+
+                return order;
+            } catch (error) {
+                console.error(error);
+                throw new Error('Failed to add order.');
+            }
+        },
         login: async (parent, { email, password }) => {
             const user = await User.findOne({ email });
             console.log(email);

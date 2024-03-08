@@ -34,4 +34,7 @@ mutation Mutation($description: String!, $name: String!, $price: Int) {
     price
     description
   }
-}`
+}
+`;
+export const REMOVE_ITEM = gql`
+`
