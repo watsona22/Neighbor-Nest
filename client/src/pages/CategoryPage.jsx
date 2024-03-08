@@ -25,6 +25,9 @@ function CategoryPage(props) {
     other,
     sports,
   ];
+const links = [
+  '/item1'
+]
 
   const categories = useContext(Context);
 
@@ -35,9 +38,9 @@ function CategoryPage(props) {
         {images.map((image) => {
           return (
             <div>
-              <a href="">
+              <a href={links}>
                 <img src={image} alt="" />
-              </a>
+                </a>
               <p>Placeholder Name</p>
               <h5>$100.92</h5>
             </div>

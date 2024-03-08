@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Context } from "../App";
 import Car from "../assets/car.jpg";
 import "../styles/shopByCategory.css";
+import { ShopByItem } from "./ShopByItem";
 
 function ShopByCategory() {
   const categories = useContext(Context);
