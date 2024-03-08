@@ -14,7 +14,7 @@ function Header() {
     return (<p>...</p>);
   }
   
-  console.log(data);
+  
   return (
     <div className="header-container">
       <Link to="/">
