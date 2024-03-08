@@ -118,10 +118,9 @@ const resolvers = {
         },
 
         removeItem: async (parent, { userId, itemId }) => {
-
             try {
                 // Find the item to be removed
-                const item = await Item.findOneAndDelete({ _id: itemId });
+                const item = await Item.findByIdAndDelete({ _id: itemId });
                 console.log(item)
                 if (!item) {
                     throw new Error('Item not found.')
@@ -129,7 +128,7 @@ const resolvers = {
 
                 // Remove reference to user
                 await User.updateOne(
-                    { _id: item.userId },
+                    { _id: userId },
                     { $pull: { Item: itemId } } // Remove the itemId
                 );
 
