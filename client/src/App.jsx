@@ -13,6 +13,7 @@ import ContactPage from "./pages/ContactPage";
 import AboutUs from "./pages/AboutUs";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import PostItem from "./components/PostItem";
 
 import carImage from './assets/car.jpg'
 import clothingImage from './assets/clothing.jpg'
@@ -89,6 +90,7 @@ function App() {
                 <Route path="/about-us" element={<AboutUs />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/sign-up" element={<Signup />} />
+                <Route path="/post-item" element={<PostItem />} />
               </Routes>
             </div>
             <Footer />
