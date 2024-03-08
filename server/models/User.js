@@ -20,6 +20,10 @@ const userSchema = new Schema({
         required: true,
 
     },
+    Item: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Item'
+    }],
     orders: [
         {
             type: Schema.Types.ObjectId,
