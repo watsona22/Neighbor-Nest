@@ -23,8 +23,9 @@ const resolvers = {
             return await Item.findById(_id).populate('category');
         },
         user: async (parent, args, context) => {
-            // if (context.user) {
-                const user = await User.findById('65e9106f6b1fa76f415fa0c4').populate({
+            console.log(context.user)
+            if (context.user) {
+                const user = await User.findById(context.user._id).populate({
                     path: 'orders.items',
                     populate: 'category'
                 });
@@ -32,7 +33,7 @@ const resolvers = {
                 user.orders.sort((a, b) => b.purchaseDate - a.purchaseDate);
 
                 return user;
-            // }
+            }
 
             throw new Auth.AuthenticationError
         },
