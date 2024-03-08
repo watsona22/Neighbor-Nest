@@ -1,6 +1,7 @@
 import { createContext, useEffect } from "react";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
-import { ApolloClient, InMemoryCache, ApolloProvider, gql } from '@apollo/client';
+import { ApolloClient, InMemoryCache, ApolloProvider, gql, createHttpLink } from '@apollo/client';
+import { setContext } from '@apollo/client/link/context';
 import "./App.css";
 
 
@@ -49,8 +50,22 @@ function ScrollToTop() {
 
 export const Context = createContext();
 
-const client = new ApolloClient({
+const httpLink = createHttpLink({
   uri: '/graphql',
+});
+
+const authLink = setContext((_, { headers }) => {
+  const token = localStorage.getItem('id_token');
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? `Bearer ${token}` : '',
+    },
+  };
+});
+
+const client = new ApolloClient({
+  link: authLink.concat(httpLink),
   cache: new InMemoryCache(),
 });
 
