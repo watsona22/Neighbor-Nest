@@ -42,6 +42,7 @@ const typeDefs = `
     user: User
     order(_id: ID!): Order
     checkout(items: [ID]!): Checkout
+    users: [User]
   }
 
   type RemoveItemPayload {
