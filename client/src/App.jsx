@@ -74,7 +74,13 @@ const client = new ApolloClient({
 
 
 function App() {
-
+const sportsItems = [
+  {
+    name: 'baseball bat',
+    price: '$10',
+    link: 'baseball-bat'
+  }
+]
 
   return (
     <ApolloProvider client={client}>
@@ -94,8 +100,14 @@ function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/sign-up" element={<Signup />} />
                 <Route path="/post-item" element={<PostItem />} />
+
                 <Route path="/post-order" element={<PostOrder />} />
 
+
+
+                {sportsItems.map((item) => {
+                  return <Route path={item.link} element={<Item link={sportsImage.link } />} />
+                })}
 
               </Routes>
             </div>

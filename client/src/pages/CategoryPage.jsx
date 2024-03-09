@@ -28,6 +28,9 @@ function CategoryPage(props) {
     other,
     sports,
   ];
+const links = [
+  '/item1'
+]
 
   const categories = useContext(Context);
 
