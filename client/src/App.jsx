@@ -105,9 +105,9 @@ const sportsItems = [
 
 
 
-                {sportsItems.map((item) => {
+                {/* {sportsItems.map((item) => {
                   return <Route path={item.link} element={<Item link={sportsImage.link } />} />
-                })}
+                })} */}
 
               </Routes>
             </div>
