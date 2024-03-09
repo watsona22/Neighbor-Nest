@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
-import { ADD_ORDER } from './mutations';
+import { ADD_ORDER } from '../utils/mutations.js';
 import '../styles/postOrder.css';
 import svg from '../assets/svg.svg'
 
