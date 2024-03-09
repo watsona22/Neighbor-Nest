@@ -75,7 +75,7 @@ const resolvers = {
     },
     Mutation: {
         addUser: async (parent, args) => {
-            console.log(args);
+            console.log("logging out", args);
             try {
 
                 const user = await User.create({
