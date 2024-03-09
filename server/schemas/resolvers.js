@@ -119,7 +119,7 @@ const resolvers = {
         removeItem: async (parent, { userId, itemId }) => {
             try {
                 // Find the item to be removed
-                const item = await Item.findByIdAndDelete({ _id: itemId });
+                const item = await Item.findByIdAndDelete(itemId);
                 console.log(item)
                 if (!item) {
                     throw new Error('Item not found.')
@@ -130,27 +130,32 @@ const resolvers = {
                     { _id: userId },
                     { $pull: { Item: itemId } } // Remove the itemId
                 );
-
-                return { success: true, message: 'Item removed.' };
+                return { success: true, message: `Item "${item.name}" removed.` };
             } catch (error) {
                 console.error(error);
                 throw new Error('Failed to remove item.');
             }
         },
-        addOrder: async (parent, { userId, itemId }) => {
+        addOrder: async (parent, { userId, items }) => {
+            console.log(items);
             try {
-                // Validate input parameters
-                if (!userId || !itemId || !Array.isArray(itemId) || itemIds.length === 0) {
-                    throw new Error('Invalid input parameters.');
+                // Validate input
+                if (!userId || !items || !Array.isArray(items) || items.length === 0) {
+                    throw new Error('Invalid.');
                 }
-
                 // Create the order
                 const order = await Order.create({
                     user: userId, // Associate the order with the user
-                    items: itemId // Associate the order with the items
+                    items: items // Associate the order with the items
                 });
+                // Fetch the associated items
+                const fetchedItems = await Item.find({ _id: { $in: items } });
 
-                return order;
+                // Include the fetched items in the order object
+                order.items = fetchedItems;
+                console.log(order)
+                return order; // Return the order object with associated items
+
             } catch (error) {
                 console.error(error);
                 throw new Error('Failed to add order.');

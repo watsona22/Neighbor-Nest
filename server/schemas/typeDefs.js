@@ -44,12 +44,17 @@ const typeDefs = `
     checkout(items: [ID]!): Checkout
   }
 
+  type RemoveItemPayload {
+    success: Boolean
+    message: String
+  }
+
   type Mutation {
     addUser(firstName: String!, lastName: String!, email: String!, password: String!): Auth
-    addOrder(items: [ID]!): Order
+    addOrder(userId: [ID]!, items: [ID]!): Order
     updateUser(firstName: String, lastName: String, email: String, password: String): User
     addItem(name: String!, price: Int, description: String!): Item
-    removeItem(userId: ID!, itemId: ID!): Item
+    removeItem(userId: ID!, itemId: ID!): RemoveItemPayload
     updateItem(_id: ID!, quantity: Int!): Item
     login(email: String!, password: String!): Auth
   }
