@@ -14,6 +14,7 @@ import AboutUs from "./pages/AboutUs";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import PostItem from "./components/PostItem";
+import PostOrder from "./components/PostOrder";
 
 import carImage from './assets/car.jpg'
 import clothingImage from './assets/clothing.jpg'
@@ -45,7 +46,7 @@ function ScrollToTop() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [pathname]); 
+  }, [pathname]);
 
   return null;
 }
@@ -92,16 +93,22 @@ const sportsItems = [
               <Routes>
                 <Route path="/" element={<Homepage />} />
                 {categories.map((category, index) => {
-                  return <Route path={category.link} element={<CategoryPage key={index} index={index}/>}/>
+                  return <Route path={category.link} element={<CategoryPage key={index} index={index} />} />
                 })}
                 <Route path="/contact" element={<ContactPage />} />
                 <Route path="/about-us" element={<AboutUs />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/sign-up" element={<Signup />} />
                 <Route path="/post-item" element={<PostItem />} />
+
+                <Route path="/post-order" element={<PostOrder />} />
+
+
+
                 {sportsItems.map((item) => {
                   return <Route path={item.link} element={<Item link={sportsImage.link } />} />
                 })}
+
               </Routes>
             </div>
             <Footer />

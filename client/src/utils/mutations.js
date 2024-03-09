@@ -37,4 +37,23 @@ mutation Mutation($description: String!, $name: String!, $price: Int) {
 }
 `;
 export const REMOVE_ITEM = gql`
+mutation RemoveItem($userId: ID!, $itemId: ID!) {
+  removeItem(userId: $userId, itemId: $itemId) {
+    success
+    message
+  }
+}
+`
+export const ADD_ORDER = gql`
+mutation Mutation($userId: [ID]!, $items: [ID]!) {
+  addOrder(userId: $userId, items: $items) {
+    items {
+      description
+      name
+      price
+      _id
+    }
+    _id
+  }
+}
 `
