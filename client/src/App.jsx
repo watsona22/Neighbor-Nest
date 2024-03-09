@@ -40,6 +40,7 @@ const categories = [
   { category: "Other", link: "/other", image: otherImage },
 ];
 
+
 function ScrollToTop() {
   const { pathname } = useLocation();
 
@@ -70,6 +71,7 @@ const client = new ApolloClient({
   link: authLink.concat(httpLink),
   cache: new InMemoryCache(),
 });
+
 
 function App() {
 
