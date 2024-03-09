@@ -2,8 +2,8 @@
 const casual = require ('./casual');
 const deleteCasualData = require('./deleteCasualData');
 const mongoose = require('mongoose');
-const User = require('../models/User');
-const Item = require('../models/Item');
+const {User, Item } = require('../models/index.js');
+
 
 mongoose.connect('mongodb://localhost:27017/NeighborNest', {
   useNewUrlParser: true,
@@ -36,6 +36,8 @@ async function seedData() {
 
     console.log(users);
     console.log(items);
+    await User.insertMany(users);
+    process.exit();
   } catch (error) {
     console.error('Error seeding data:', error);
   }

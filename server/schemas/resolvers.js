@@ -71,6 +71,9 @@ const resolvers = {
             });
 
             return { session: session.id }
+        },
+        users: async () => {
+            return await User.find();
         }
     },
     Mutation: {

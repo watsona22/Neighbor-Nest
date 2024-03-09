@@ -1,5 +1,7 @@
-const User = require('../models/User');
-const bcrypt = require('bcrypt');
+const db = require('../config/connection');
+const {User, Item} = require('../models/index.js');
+const cleanDB = require('./cleanDB');
+
 
 const usersData = [
     {
@@ -63,21 +65,35 @@ const usersData = [
         password: 'password321',
     },
 ];
-
-async function seedUsers() {
+db.once('open', async () => {
     try {
-        for (let userData of usersData) {
-            const saltRounds = 10;
-            const hashedPassword = await bcrypt.hash(userData.password, saltRounds);
-            userData.password = hashedPassword;
-            await User.create(userData);
-        }
-        console.log('Users seeded successfully');
+        await cleanDB('User', 'users');
+        await User.insertMany(usersData);
     } catch (err) {
-        console.error('Error seeding users:', err);
+        console.error('Error cleaning users collection:', err);
     }
-}
+});
+// async function seedUsers() {
+//     try {
+//         await db.User.deleteMany({})
+        
+//     }
+//     catch (err) {
+//         console.error('Error seeding users:', err);
+//     }
+    // try {
+    //     for (let userData of usersData) {
+    //         const saltRounds = 10;
+    //         const hashedPassword = await bcrypt.hash(userData.password, saltRounds);
+    //         userData.password = hashedPassword;
+    //         await User.create(userData);
+    //     }
+    //     console.log('Users seeded successfully');
+    // } catch (err) {
+    //     console.error('Error seeding users:', err);
+    // }
 
-seedUsers();
 
-module.exports = seedUsers;
+// seedUsers();
+
+// module.exports = seedUsers;
