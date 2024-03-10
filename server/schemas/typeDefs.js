@@ -2,14 +2,16 @@ const typeDefs = `
   type Category {
     _id: ID
     name: String!
-    items: [Item]
   }
 
   type Item {
     _id: ID!
     name: String!
     description: String!
-    price: Int
+    price: Float
+    quantity: Int
+    category: Category
+    image: String
   }
 
   type Order {
@@ -24,6 +26,7 @@ const typeDefs = `
     lastName: String
     email: String!
     orders: [Order]
+    items: [Item]
   }
 
   type Checkout {

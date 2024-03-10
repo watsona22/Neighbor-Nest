@@ -5,17 +5,12 @@ const orderSchema = new Schema({
         type: Date,
         default: Date.now
     },
-    products: [
+    items: [
         {
             type: Schema.Types.ObjectId,
             ref: 'Item'
         }
-    ],
-    user: {
-        type: Schema.Types.ObjectId,
-        ref: 'User',
-        required: true,
-    },
+    ]
 });
 
 const Order = model('Order', orderSchema)
