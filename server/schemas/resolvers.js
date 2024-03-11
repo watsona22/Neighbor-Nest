@@ -30,11 +30,13 @@ const resolvers = {
             return await User.find().populate('orders').populate('items');
             
         },
-        // This will get single user????
+        // This will get single user???? - Fixed, has to be auth in context
         user: async (parent, args, context) => {
             // console.log(context.user._id);
             if (context.user) {
                 const user = await User.findById(context.user._id)
+                    .populate('items')
+                    
 
                 // user.orders.sort((a, b) => b.purchaseDate - a.purchaseDate);
 
@@ -119,14 +121,21 @@ const resolvers = {
 
             throw AuthenticationError
         },
-        addItem: async (parent, { _id, quantity }) => {
+        // adds item to users  - Tested
+        addItem: async (parent, { name, price, description }, context) => {
             try {
+                if (!context.user) {
+                    throw AuthenticationError
+                }
                 const item = await Item.create({
                     name,
                     price,
                     description,
-                    user: userId
                 })
+                 await User.findOneAndUpdate(
+                    { _id: context.user._id },
+                    { $addToSet: { items: item._id } },
+                );
                 return item;
             } catch (err) {
                 console.log(err);
@@ -181,6 +190,7 @@ const resolvers = {
                 throw new Error('Failed to add order.');
             }
         },
+        //tested 
         login: async (parent, { email, password }) => {
             const user = await User.findOne({ email });
             console.log(email);
