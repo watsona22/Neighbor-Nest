@@ -5,6 +5,14 @@ query getUser {
     user {
       _id
       firstName
+      lastName
+      email
+      items {
+        _id
+        name
+        price
+        description
+      }
     }
   }
 `;

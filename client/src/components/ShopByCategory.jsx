@@ -12,7 +12,7 @@ function ShopByCategory() {
     <div className="shop-by-cat-container">
       {categories.map((categoryItem, index) => {
         return (
-          <div>
+          <div key={index}>
             <Link to={categoryItem.link}>
               <h4>{categoryItem.category}</h4>
               <img src={categoryItem.image} alt="" />
