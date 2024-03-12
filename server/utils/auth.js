@@ -15,7 +15,7 @@ const Auth = {
     authMiddleware: function ({ req }) {
         // allows token to be sent via req.body, req.query, or headers
         let token = req.body.token || req.query.token || req.headers.authorization;
-        console.log(`Auth token ${token}`)
+        // console.log(`Auth token ${token}`)
         // We split the token string into an array and return actual token
         //'Authorations: bearer <token>' (token is the jwt in this case)
         if (req.headers.authorization) {
