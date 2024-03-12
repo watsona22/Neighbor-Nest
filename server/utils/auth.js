@@ -15,8 +15,7 @@ module.exports = {
     authMiddleware: function ({ req }) {
         // allows token to be sent via req.body, req.query, or headers
         let token = req.body.token || req.query.token || req.headers.authorization;
-        console.log('Request object:', req.headers.authorization);
-        console.log('Initial token:', token);
+
         // console.log(`Auth token ${token}`)
         // We split the token string into an array and return actual token
         //'Authorations: bearer <token>' (token is the jwt in this case)
@@ -24,8 +23,8 @@ module.exports = {
             //takes token bit from the header below
             token = token.split(' ').pop().trim();
         }
-        console.log('Final token:', token);
-        console.log(`auth token ${token}`)
+        // console.log('Final token:', token);
+        // console.log(`auth token ${token}`)
         // if there is no token, return request object as is
         if (!token) {
             return req;

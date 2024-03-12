@@ -23,6 +23,7 @@ function ContactPage() {
           Message
           <textarea name="message" id="message" cols="30" rows="10"></textarea>
         </label>
+        <button>Submit</button>
       </form>
     </div>
   );

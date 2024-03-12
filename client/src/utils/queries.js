@@ -44,6 +44,7 @@ export const GET_CATEGORY = gql `
         items
     }
   }
+
 `;
 
 export const GET_CATEGORIES = gql `
@@ -60,4 +61,7 @@ export const GET_CATEGORIES = gql `
   }
 `;
 
-// export default () => useQuery(GET_CATEGORIES);
+
+
+
+

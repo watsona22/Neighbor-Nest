@@ -1,16 +1,18 @@
 const models = require('../models');
 const db = require('../config/connection');
+const mongoose = require('mongoose');
 
 module.exports = async (modelName, collectionName) => {
   try {
-    let modelExists = await models[modelName].db.db.listCollections({
-      name: collectionName
-    }).toArray()
-
-    if (modelExists.length) {
-      await db.dropCollection(collectionName);
+    const model = mongoose.model(modelName);
+    if (!model) {
+      throw new Error(`Model ${modelName} not found.`);
     }
+
+    await model.deleteMany();
+    console.log(`Collection ${collectionName} cleaned successfully.`);
   } catch (err) {
+    console.error('Error cleaning collection:', err);
     throw err;
   }
 }

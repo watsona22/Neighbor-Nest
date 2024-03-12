@@ -1,7 +1,8 @@
 const db = require('../config/connection');
 const {User, Item} = require('../models/index.js');
 const cleanDB = require('./cleanDB');
-
+const casual = require('casual');
+const bcrypt = require('bcrypt');
 
 const usersData = [
     {
@@ -65,10 +66,46 @@ const usersData = [
         password: 'password321',
     },
 ];
-db.once('open', async () => {
+
+const generateCasualUserData = () => {
+    return {
+        firstName: casual.first_name,
+        lastName: casual.last_name,
+        email: casual.email,
+        password: casual.password,
+    };
+};
+
+const seedUsers = async () => {
     try {
         await cleanDB('User', 'users');
-        await User.insertMany(usersData);
+
+        
+        const saltRounds = 10;
+        const hashedUsersData = await Promise.all(usersData.map(async userData => {
+            const hashedPassword = await bcrypt.hash(userData.password, saltRounds);
+            return { ...userData, password: hashedPassword };
+        }));
+
+       
+        const casualUsersData = Array.from({ length: 20 }, generateCasualUserData);
+        const hashedCasualUsersData = await Promise.all(casualUsersData.map(async userData => {
+            const hashedPassword = await bcrypt.hash(userData.password, saltRounds);
+            return { ...userData, password: hashedPassword };
+        }));
+
+        const combinedUsersData = [...hashedUsersData, ...hashedCasualUsersData];
+
+        await User.insertMany(combinedUsersData);
+        console.log('Users seeded successfully');
+    } catch (err) {
+        console.error('Error seeding users:', err);
+    }
+};
+
+db.once('open', async () => {
+    try {
+        await seedUsers();
     } catch (err) {
         console.error('Error cleaning users collection:', err);
     }
