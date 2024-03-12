@@ -109,6 +109,7 @@ db.once('open', async () => {
     } catch (err) {
         console.error('Error cleaning users collection:', err);
     }
+    process.exit()
 });
 // async function seedUsers() {
 //     try {

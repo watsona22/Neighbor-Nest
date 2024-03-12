@@ -7,8 +7,12 @@ const resolvers = {
     Query: {
         // This will get all categories - Tested
         categories: async () => {
-            return await Category.find();
+            return await Category.find().populate('items')
         },
+        category: async (parent, {_id}) => {
+            return await Category.findById(_id).populate('items')
+        },
+
         // This will get all items
         items: async (parent, { category, name }) => {
             const params = {}
@@ -23,7 +27,7 @@ const resolvers = {
         },
         // This will get a single item by its id
         item: async (parent, { _id }) => {
-            return await Item.findById(_id).populate('category');
+            return await Item.findById(_id);
         },
         // This will get all users - Tested
         users: async () => {

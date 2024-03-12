@@ -39,7 +39,7 @@ module.exports = {
         //this code is important for authentication with jwt
         try {
             const { data } = jwt.verify(token, secret);
-            console.log('User data:', data);
+            // console.log('User data:', data);
             req.user = data;
         } catch (err) {
             console.log('error when verifying token');

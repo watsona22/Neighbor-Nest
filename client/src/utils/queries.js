@@ -44,15 +44,24 @@ export const GET_CATEGORY = gql `
         items
     }
   }
-`
 
-export const GET_CATEGORIES = gql`
-query GetCategories {
-  categories {
-    category
-    link
-    image
-  }
-}
 `;
-  
+
+export const GET_CATEGORIES = gql `
+  query getCategories {
+    categories {
+        _id
+        image
+        items {
+          _id
+        }
+        link
+        name
+    }
+  }
+`;
+
+
+
+
+
