@@ -139,21 +139,29 @@ async function seedData() {
         }
 
         // Combine existing and generated users
-        const users = [...existingUsers, ...generatedUsers, ...usersData];
+        const users = [...existingUsers, ...generatedUsers];
+        console.log('Total Users:', users.length);
 
-        // Assign random users to items
+        // Fetch existing categories
+        const existingCategories = await Category.find();
+
+        // Assign random users to items and assign existing categories
         for (let itemData of itemsData) {
             const randomUser = users[Math.floor(Math.random() * users.length)];
+            if (!randomUser) {
+                console.error('No random user found for item:', itemData.name);
+                continue;
+            }
+            console.log('Random User:', randomUser); // Log the random user
             itemData.user = randomUser._id;
 
-            // Only assign a category if the item is associated with a user
-            if (randomUser) {
-                const categories = await Category.find();
-                const randomCategory = categories[Math.floor(Math.random() * categories.length)];
-                itemData.category = randomCategory._id;
-            }
-
+            // Assign an existing category to the item
+            const randomCategory = existingCategories[Math.floor(Math.random() * existingCategories.length)];
+            console.log('Random Category:', randomCategory); // Log the random category
+            itemData.category = randomCategory._id;
+            
             await Item.create(itemData);
+            console.log('Item created:', itemData.name); // Log that item is created
         }
 
         console.log('Data seeded successfully');
