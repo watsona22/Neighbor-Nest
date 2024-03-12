@@ -10,6 +10,9 @@ type User {
   type Category {
     _id: ID
     name: String!
+    link: String!
+    image: String
+    items: [Item]
   }
 
   type Item {
@@ -46,6 +49,7 @@ type User {
     order(_id: ID!): Order
     checkout(items: [ID]!): Checkout
     users: [User]
+    category(_id: ID!): Category
   }
 
   type RemoveItemPayload {

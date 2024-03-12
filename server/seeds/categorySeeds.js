@@ -4,36 +4,16 @@ const cleanDB = require('./cleanDB');
 
 
 const categoryData = [
-    {
-        name: 'Furniture',
-    },
-    {
-        name: 'Electronics',
-    },
-    {
-        name: 'Clothing',
-    },
-    {
-        name: 'Books',
-    },
-    {
-        name: 'Toys',
-    },
-    {
-        name: 'Tools',
-    },
-    {
-        name: 'Sporting Goods',
-    },
-    {
-        name: 'Automotive',
-    },
-    {
-        name: 'Jewelry',
-    },
-    {
-        name: 'Appliances',
-    },
+    { name: "Car Parts and Accessories", link: "/car-parts", image: "" },
+    { name: "Clothing and Accessories", link: "/clothing-and-accessories", image:"" },
+    { name: "Sporting Goods", link: "/sporting-goods", image: "" },
+    { name: "Electronics", link: "/electronics", image: ""},
+    { name: "Business and Industrial", link: "/business-and-industrial", image: "" },
+    { name: "Jewelry and Watches", link: "/jewelry-and-watches", image: ""},
+    { name: "Collectibles and Art", link: "/collectibles-and-art", image:"" },
+    { name: "Home and Garden", link: "/home-and-garden", image: ""},
+    { name: "Pet Supplies", link: "/pet-supplies", image:"" },
+    { name: "Other", link: "/other", image: "" },
 ];
 db.once('open', async () => {
     try {

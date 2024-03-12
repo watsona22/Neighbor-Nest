@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 const {User, Item } = require('../models/index.js');
 
 
-mongoose.connect('mongodb://localhost:27017/NeighborNest', {
+mongoose.connect('mongodb://localhost:27017/Neighbor-Nest', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });

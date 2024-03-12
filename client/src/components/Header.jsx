@@ -9,7 +9,7 @@ import { useQuery } from "@apollo/client";
 function Header() {
   const [search, setSearch] = useState("");
   const { loading, data } = useQuery(GET_USER);
-  // if statement belows allows page to render even when loading
+  // if statement below allows page to render even when loading
   if (loading) {
     return (<p>...</p>);
   }
