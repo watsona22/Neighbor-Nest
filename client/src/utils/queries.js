@@ -5,6 +5,14 @@ query getUser {
     user {
       _id
       firstName
+      lastName
+      email
+      items {
+        _id
+        name
+        price
+        description
+      }
     }
   }
 `;
@@ -37,3 +45,14 @@ export const GET_CATEGORY = gql `
     }
   }
 `
+
+export const GET_CATEGORIES = gql`
+query GetCategories {
+  categories {
+    category
+    link
+    image
+  }
+}
+`;
+  

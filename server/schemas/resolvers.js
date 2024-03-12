@@ -1,13 +1,15 @@
-const Auth = require('../utils/auth.js')
-
-const { User, Item, Category, Order } = require('../models/index.js');
+const {AuthenticationError, signToken} = require('../utils/auth.js')
+const stripe = require('stripe');
+const { User, Item, Category, Order } = require('../models');
 // import stripe from 'stripe';
 
 const resolvers = {
     Query: {
+        // This will get all categories - Tested
         categories: async () => {
             return await Category.find();
         },
+        // This will get all items
         items: async (parent, { category, name }) => {
             const params = {}
 
@@ -19,23 +21,42 @@ const resolvers = {
             };
             return await Item.find(params).populate('category')
         },
+        // This will get a single item by its id
         item: async (parent, { _id }) => {
             return await Item.findById(_id).populate('category');
         },
+        // This will get all users - Tested
+        users: async () => {
+            return await User.find().populate('orders').populate('items');
+            
+        },
+        // This will get single user???? - Fixed, has to be auth in context
         user: async (parent, args, context) => {
+            // console.log(context.user._id);
             if (context.user) {
-                const user = await User.findById(context.user._id).populate({
-                    path: 'orders.items',
-                    populate: 'category'
-                });
+                const user = await User.findById(context.user._id)
+                    .populate('items')
+                    
 
-                user.orders.sort((a, b) => b.purchaseDate - a.purchaseDate);
+                // user.orders.sort((a, b) => b.purchaseDate - a.purchaseDate);
 
                 return user;
             }
 
-            throw new Auth.AuthenticationError
+            throw AuthenticationError
         },
+        // This will get a single order by its id
+        order: async (parent, { _id }, context) => {
+            if (context.user) {
+                const user = await User.findById(context.user._id).populate({
+                    path: 'orders.items',
+                    populate: 'category'
+                })
+                return user.orders.id(_id);
+            }
+            throw AuthenticationError;
+        },
+        // This will checkout an order items
         checkout: async (parent, args, context) => {
             const url = new URL(context.headers.referer).origin;
             const order = new Order({ items: args.items });
@@ -71,11 +92,12 @@ const resolvers = {
             });
 
             return { session: session.id }
-        }
+        },
+        
     },
     Mutation: {
+        // This will add a user - Tested
         addUser: async (parent, args) => {
-            console.log("logging out", args);
             try {
 
                 const user = await User.create({
@@ -84,7 +106,7 @@ const resolvers = {
                     email: args.email,
                     password: args.password
                 })
-                const token = Auth.signToken(user);
+                const token = signToken(user);
                 return { user, token }
             } catch (err) {
                 console.log(err);
@@ -97,16 +119,23 @@ const resolvers = {
                 return await User.findByIdAndUpdate(context.user._id, args, { new: true });
             }
 
-            throw Auth.AuthenticationError
+            throw AuthenticationError
         },
-        addItem: async (parent, { userId, name, price, description }) => {
+        // adds item to users  - Tested
+        addItem: async (parent, { name, price, description }, context) => {
             try {
+                if (!context.user) {
+                    throw AuthenticationError
+                }
                 const item = await Item.create({
                     name,
                     price,
                     description,
-                    user: userId
                 })
+                 await User.findOneAndUpdate(
+                    { _id: context.user._id },
+                    { $addToSet: { items: item._id } },
+                );
                 return item;
             } catch (err) {
                 console.log(err);
@@ -161,21 +190,22 @@ const resolvers = {
                 throw new Error('Failed to add order.');
             }
         },
+        //tested 
         login: async (parent, { email, password }) => {
             const user = await User.findOne({ email });
             console.log(email);
             console.log(user);
             if (!user) {
-                throw Auth.AuthenticationError
+                throw AuthenticationError
             }
             const correctPw = await user.isCorrectPassword(password);
             console.log(correctPw);
 
             if (!correctPw) {
-                throw Auth.AuthenticationError
+                throw AuthenticationError
             }
 
-            const token = Auth.signToken(user);
+            const token = signToken(user);
 
             return { token, user };
         }

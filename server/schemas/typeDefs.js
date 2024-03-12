@@ -1,15 +1,24 @@
 const typeDefs = `
+type User {
+  _id: ID!
+  firstName: String
+  lastName: String
+  email: String!
+  orders: [Order]
+  items: [Item]
+}
   type Category {
     _id: ID
     name: String!
-    items: [Item]
   }
 
   type Item {
     _id: ID!
     name: String!
     description: String!
-    price: Int
+    price: Float
+    quantity: Int
+    image: String
   }
 
   type Order {
@@ -18,13 +27,7 @@ const typeDefs = `
     items: [Item]
   }
 
-  type User {
-    _id: ID!
-    firstName: String
-    lastName: String
-    email: String!
-    orders: [Order]
-  }
+ 
 
   type Checkout {
     session: ID!
@@ -42,6 +45,7 @@ const typeDefs = `
     user: User
     order(_id: ID!): Order
     checkout(items: [ID]!): Checkout
+    users: [User]
   }
 
   type RemoveItemPayload {
