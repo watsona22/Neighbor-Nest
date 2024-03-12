@@ -12,7 +12,7 @@ import industry from "../assets/industry.avif";
 import jewelry from "../assets/jewelry.jpg";
 import other from "../assets/other.jpeg";
 import sports from "../assets/sports.jpg";
-
+import { Link } from "react-router-dom";
 
 
 function CategoryPage(props) {

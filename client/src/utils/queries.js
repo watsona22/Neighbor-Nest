@@ -45,3 +45,14 @@ export const GET_CATEGORY = gql `
     }
   }
 `
+
+export const GET_CATEGORIES = gql`
+query GetCategories {
+  categories {
+    category
+    link
+    image
+  }
+}
+`;
+  
