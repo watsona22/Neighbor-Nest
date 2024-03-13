@@ -1,19 +1,22 @@
 import { useState, useContext } from "react";
 import '../styles/header.css'
-import { Context } from "../App";
+import { GET_CATEGORIES } from "../utils/queries";
+import { useQuery } from "@apollo/client";
 
 
 
 function DropDownCategories() {
-  
-  const categories = useContext(Context);
+  const { loading, error, data } = useQuery(GET_CATEGORIES)
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error.message}</p>; 
+  let index = 0;
   
 
   return (
     <div className="dropdown-menu">
       <ul>
-        {categories.map((categoryItem, index) => {
-          return <li key={index}>{<a href={categoryItem.link}>{categoryItem.category}</a>}</li>
+        {data.categories.map((categoryItem, index) => {
+          return <li key={index}>{<a href={categoryItem.link}>{categoryItem.name}</a>}</li>
         })}
       </ul>
     </div>

@@ -1,60 +1,37 @@
-import { useState, useContext } from "react";
-import { Context } from "../App";
-import placeholderImage from "../assets/placeholderImage.jpg";
-import "../styles/categoryPage.css";
-import art from "../assets/art.jpg";
-import car from "../assets/car.jpg";
-import clothing from "../assets/clothing.jpg";
-import dog from "../assets/dog.jpg";
-import electronics from "../assets/electronics.webp";
-import home from "../assets/home.jpg";
-import industry from "../assets/industry.avif";
-import jewelry from "../assets/jewelry.jpg";
-import other from "../assets/other.jpeg";
-import sports from "../assets/sports.jpg";
 import { Link } from "react-router-dom";
-
+import { GET_ITEMS } from "../utils/queries";
+import { useQuery } from "@apollo/client";
+import '../styles/categoryPage.css'
+import placeholderImage from '../assets/placeholderImage.jpg'
 
 function CategoryPage(props) {
-  const images = [
-    art,
-    car,
-    clothing,
-    dog,
-    electronics,
-    home,
-    industry,
-    jewelry,
-    other,
-    sports,
-  ];
-const links = [
-  '/item1'
-]
+  const { loading, error, data } = useQuery(GET_ITEMS, {
+    variables: {
+      category: props.categoryId,
+      name: props.categoryName
+    }
+  });
 
-  const categories = useContext(Context);
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error.message}</p>;
 
   return (
-    
     <div className="category-page-container">
-      <h2>{categories[props.index].category}</h2>
+      <h2>{props.categoryName}</h2>
       <div className="products-container">
-        {images.map((image) => {
-          return (
-            <div>
-              <Link to="categoriesForSale.link">
-                <a href="">
-                  <img src={image} alt="" />
-                </a>
-                <p>Placeholder Name</p>
-                <h5>$100.92</h5>
-              </Link>
-            </div>
-          );
-        })}
+        {data.items.map(item => (
+          <div key={item._id}>
+            <Link to={`/items/${item._id}`}>
+              <img src={placeholderImage} alt={item.name} />
+              <p>{item.name}</p>
+              <h5>${item.price}</h5>
+            </Link>
+          </div>
+        ))}
       </div>
     </div>
   );
 }
 
 export default CategoryPage;
+

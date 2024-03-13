@@ -20,7 +20,6 @@ export const LOGIN_USER = gql`
       user {
         _id
         email
-       
       }
       token
     }
@@ -28,14 +27,20 @@ export const LOGIN_USER = gql`
 `;
 
 export const ADD_ITEM = gql`
-mutation Mutation($description: String!, $name: String!, $price: Int) {
-  addItem(description: $description, name: $name, price: $price) {
-    name
-    price
-    description
+  mutation AddItem($description: String!, $name: String!, $price: Float!, $category: String!) {
+    addItem(description: $description, name: $name, price: $price, category: $category) {
+      _id
+      name
+      price
+      description
+      category {
+        _id
+        name
+      }
+    }
   }
-}
 `;
+
 export const REMOVE_ITEM = gql`
 mutation RemoveItem($userId: ID!, $itemId: ID!) {
   removeItem(userId: $userId, itemId: $itemId) {
@@ -45,15 +50,16 @@ mutation RemoveItem($userId: ID!, $itemId: ID!) {
 }
 `
 export const ADD_ORDER = gql`
-mutation Mutation($userId: [ID]!, $items: [ID]!) {
-  addOrder(userId: $userId, items: $items) {
-    items {
-      description
-      name
-      price
+  mutation Mutation($userId: [ID]!, $items: [ID]!) {
+    addOrder(userId: $userId, items: $items) {
+      items {
+        description
+        name
+        price
+        _id
+      }
       _id
     }
-    _id
   }
-}
-`
+`;
+

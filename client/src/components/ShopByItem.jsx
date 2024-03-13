@@ -1,23 +1,23 @@
-import { useContext, useState } from "react";
-import { Context } from "../App";
-import { Link } from "react-router-dom";
-import { GET_ITEM } from "../utils/queries";
-import { useQuery } from "@apollo/client";
+import placeholderImage from '../assets/placeholderImage.jpg'
 
-export const ShopByItem = () => {
-const { loading, error, data } = useQuery(GET_ITEM);
-if (loading) return <p>Loading...</p>;
-if (error) return <p>Error: {error.message}</p>; 
+const divStyle = {
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  gap: "10px",
 
+  height: "621px"
+}
+
+
+export const ShopByItem = (props) => {
+  
   return (
-    <div>
-        {data.map((item) => {
-            return (
-                <div>
-                    <p name={name} price={price} description={description}></p>
-                </div>
-            )
-        })}
+    <div style={divStyle}>
+        <h2>{props.itemName}</h2>
+        <img src={placeholderImage} alt="" />
+        <p>{props.itemDescription}</p>
+        <p><strong>${props.itemPrice}</strong></p>
     </div>
   )
 }

@@ -1,18 +1,19 @@
 import { useState } from "react";
 import "../styles/postItem.css";
-import { useContext } from "react";
-import { Context } from "../App";
-import svg from '../assets/svg.svg'
+import { GET_CATEGORIES } from "../utils/queries";
+import { ADD_ITEM } from "../utils/mutations";
+import { useQuery, useMutation } from "@apollo/client";
 
 function PostItem() {
-  const categories = useContext(Context);
   const [category, setCategory] = useState("");
   const [price, setPrice] = useState("");
 
+  const { loading, error, data } = useQuery(GET_CATEGORIES);
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error.message}</p>;
+
   function handleCategoryState(event) {
     setCategory(event.target.value);
-
-    console.log(event.target.value);
   }
 
   function handlePriceChange(event) {
@@ -20,9 +21,34 @@ function PostItem() {
     setPrice(value);
   }
 
+  const [addItemMutation, { loading: mutationLoading, error: mutationError, data: mutationData }] = useMutation(ADD_ITEM)
+  
+  function handleFormSubmit(e) {
+    e.preventDefault();
+    const formData = new FormData(e.target)
+    const name = formData.get('item');
+    const description = formData.get('description')
+    const price2 = parseFloat(price);
+    const categoryName= formData.get('category')
+
+    addItemMutation({
+      variables: {
+        name: name,
+        description: description,
+        price: price2,
+        category: categoryName,
+      }
+    })
+
+    e.target.reset();
+    setPrice("");
+  }
+
+  
+
   return (
     <div className="post-item-container">
-      <form action="" className="post-item-form">
+      <form action="" className="post-item-form" onSubmit={handleFormSubmit}>
         <label htmlFor="item">
           Product
           <input type="text" name="item" id="item" required />
@@ -49,28 +75,23 @@ function PostItem() {
         </label>
         <label htmlFor="category" className="radio-label">
           Category
-          {categories.map((categoryItem, index) => {
+          {data.categories.map((categoryItem, index) => {
             return (
               <div className="radio-category">
                 <input
                   type="radio"
                   name="category"
-                  id={categoryItem.category}
-                  value={categoryItem.category}
+                  id={categoryItem.name}
+                  value={categoryItem.name}
                   onChange={handleCategoryState}
                 />
-                <label htmlFor={categoryItem.category}>
-                  {categoryItem.category}
-                </label>
+                <label htmlFor={categoryItem.name}>{categoryItem.name}</label>
               </div>
             );
           })}
         </label>
         <button type="submit">Post Item</button>
       </form>
-      <img src={svg} alt="SVG Image" />
-      
-      
     </div>
   );
 }
