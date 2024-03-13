@@ -1,5 +1,7 @@
 import { useState, useRef, useEffect } from "react";
+import { useQuery } from '@apollo/client'
 import DropDownCategories from "./DropDownCategories";
+import { GET_CATEGORIES } from "../utils/queries";
 
 
 

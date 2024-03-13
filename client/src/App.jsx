@@ -1,10 +1,11 @@
-import { createContext, useEffect } from "react";
+import { createContext, useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { ApolloClient, InMemoryCache, ApolloProvider, gql, createHttpLink } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import "./App.css";
 
-
+import { GET_CATEGORIES } from "./utils/queries.js";
+import { useQuery } from "@apollo/client";
 import Header from "./components/Header";
 import Homepage from "./components/HomepageBody";
 import Footer from "./components/Footer";
@@ -15,6 +16,7 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import PostItem from "./components/PostItem";
 import PostOrder from "./components/PostOrder";
+import ShopByCategory from "./components/ShopByCategory";
 
 import carImage from './assets/car.jpg'
 import clothingImage from './assets/clothing.jpg'
@@ -71,18 +73,28 @@ const client = new ApolloClient({
   link: authLink.concat(httpLink),
   cache: new InMemoryCache(),
 });
-
+// const getCategory = gql `
+// query getCategories {
+//   category {
+//       name
+//       link
+//       image
+//       items {
+//         _id
+//       }
+//   }
+// }
+// `
 
 function App() {
-const sportsItems = [
-  {
-    name: 'baseball bat',
-    price: '$10',
-    link: 'baseball-bat'
-  }
-]
+//   const [categories, setCategories] = useState(useQuery(GET_CATEGORIES))
 
+// const {loading, data} = useQuery(GET_CATEGORIES)
+// if (loading) return <p>Loading...</p>;
+// // if (error) return <p>Error: {error.message}</p>; 
+// console.log(data)
   return (
+
     <ApolloProvider client={client}>
       <Context.Provider value={categories}>
         <div className="main-container">
@@ -93,22 +105,15 @@ const sportsItems = [
               <Routes>
                 <Route path="/" element={<Homepage />} />
                 {categories.map((category, index) => {
-                  return <Route path={category.link} element={<CategoryPage key={index} index={index} />} />
+                  return <Route key={index}path={category.link} element={<CategoryPage key={index} index={index} />} />
                 })}
+              
                 <Route path="/contact" element={<ContactPage />} />
                 <Route path="/about-us" element={<AboutUs />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/sign-up" element={<Signup />} />
                 <Route path="/post-item" element={<PostItem />} />
-
                 <Route path="/post-order" element={<PostOrder />} />
-
-
-
-                {/* {sportsItems.map((item) => {
-                  return <Route path={item.link} element={<Item link={sportsImage.link } />} />
-                })} */}
-
               </Routes>
             </div>
             <Footer />
