@@ -19,9 +19,8 @@ type User {
     _id: ID!
     name: String!
     description: String!
-    price: Float
-    quantity: Int
-    image: String
+    price: Float!
+    category: Category!
   }
 
   type Order {
@@ -30,7 +29,7 @@ type User {
     items: [Item]
   }
 
- 
+
 
   type Checkout {
     session: ID!
@@ -43,7 +42,7 @@ type User {
 
   type Query {
     categories: [Category]
-    items(category: ID, name: String): [Item]
+    items(category: String, name: String): [Item]
     item(_id: ID!): Item
     user: User
     order(_id: ID!): Order
@@ -61,7 +60,7 @@ type User {
     addUser(firstName: String!, lastName: String!, email: String!, password: String!): Auth
     addOrder(userId: [ID]!, items: [ID]!): Order
     updateUser(firstName: String, lastName: String, email: String, password: String): User
-    addItem(name: String!, price: Int, description: String!): Item
+    addItem(name: String!, price: Float!, description: String!, category: String!): Item
     removeItem(userId: ID!, itemId: ID!): RemoveItemPayload
     updateItem(_id: ID!, quantity: Int!): Item
     login(email: String!, password: String!): Auth

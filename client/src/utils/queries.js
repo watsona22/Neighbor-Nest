@@ -28,6 +28,17 @@ export const GET_ITEM = gql `
   }
 `;
 
+export const GET_ITEMS = gql `
+  query getItems($category: String) {
+    items(category: $category) {
+        _id
+        name
+        price
+        description
+    }
+  }
+`;
+
 export const GET_ORDER = gql `
   query getOrder {
     order {

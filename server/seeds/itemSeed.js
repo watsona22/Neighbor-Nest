@@ -1,6 +1,6 @@
 const Item = require('../models/Item');
 const User = require('../models/User')
-const categoriesEnum = require('./categorySeeds');
+
 
 // const getRandomCategory = () => {
 //     return categoriesEnum[Math.floor(Math.random() * categoriesEnum.length)];

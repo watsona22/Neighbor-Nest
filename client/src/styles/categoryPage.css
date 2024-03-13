@@ -14,6 +14,18 @@ p {
   font-size: 12px;
 }
 
+.category-page-container {
+  background-color: white;
+
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+
+  min-height: 621px;
+}
+
 .category-page-container h2 {
   font-family: "Barlow", sans-serif;
   font-weight: 300;
@@ -33,15 +45,7 @@ p {
 }
 
 
-.category-page-container {
-  background-color: white;
 
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-}
 
 .products-container {
   width: 60%;

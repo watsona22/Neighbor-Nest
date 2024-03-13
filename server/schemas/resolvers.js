@@ -1,6 +1,7 @@
 const {AuthenticationError, signToken} = require('../utils/auth.js')
 const stripe = require('stripe');
 const { User, Item, Category, Order } = require('../models');
+const mongoose = require('mongoose');
 // import stripe from 'stripe';
 
 const resolvers = {
@@ -16,14 +17,19 @@ const resolvers = {
         // This will get all items
         items: async (parent, { category, name }) => {
             const params = {}
-
+        
             if (category) {
-                params.category = category
+                params.category = category; // Assuming category is a string
             }
             if (name) {
                 params.name = name
             };
-            return await Item.find(params).populate('category')
+        
+            return await Item.find(params).populate({
+                path: 'category',
+                select: 'name',
+                model: 'Category' // Select only the name field from the category object
+            });
         },
         // This will get a single item by its id
         item: async (parent, { _id }) => {
@@ -126,23 +132,39 @@ const resolvers = {
             throw AuthenticationError
         },
         // adds item to users  - Tested
-        addItem: async (parent, { name, price, description }, context) => {
+        addItem: async (parent, { name, price, description, category }, context) => {
             try {
                 if (!context.user) {
-                    throw AuthenticationError
+                    throw new AuthenticationError('You must be logged in to add an item.')
                 }
+                
+                let existingCategory = await Category.findOne({ name: category });
+                if (!existingCategory) {
+                    existingCategory = await Category.create({
+                        name: category,
+                    });
+                }
+
                 const item = await Item.create({
                     name,
                     price,
                     description,
+                    category: existingCategory._id
                 })
-                 await User.findOneAndUpdate(
-                    { _id: context.user._id },
+
+                if (!item) {
+                    console.error('Failed to create item:', { name, price, description, category });
+                    throw new Error('Failed to create item.');
+                }
+
+                await User.findByIdAndUpdate(
+                    context.user._id,
                     { $addToSet: { items: item._id } },
+                    { new: true }
                 );
                 return item;
             } catch (err) {
-                console.log(err);
+                console.error('Error adding item:', err);
                 throw new Error('Failed to add item. Please try again later.');
 
             }

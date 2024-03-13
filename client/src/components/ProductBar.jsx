@@ -2,34 +2,39 @@ import Slider from "react-slick";
 import placeholderImage from "../assets/placeholderImage.jpg";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import art from "../assets/art.jpg";
-import car from "../assets/car.jpg";
-import clothing from "../assets/clothing.jpg";
-import dog from "../assets/dog.jpg";
-import electronics from "../assets/electronics.webp";
-import home from "../assets/home.jpg";
-import industry from "../assets/industry.avif";
-import jewelry from "../assets/jewelry.jpg";
-import other from "../assets/other.jpeg";
-import sports from "../assets/sports.jpg";
-
-
+import { useQuery } from "@apollo/client";
+import { GET_ITEMS } from "../utils/queries";
+import { useState, useEffect } from "react";
 
 function ProductBar() {
-  const images = [
-    art,
-    car,
-    clothing,
-    dog,
-    electronics,
-    home,
-    industry,
-    jewelry,
-    other,
-    sports,
+  const { loading: itemsLoading, data: itemsData } = useQuery(GET_ITEMS);
+  const [randomItem, setRandomItems] = useState([]);
 
+  useEffect(() => {
+    if (!itemsLoading && itemsData) {
+      const shuffledItems = shuffleArray(itemsData.items);
+      const randomSubset = shuffledItems.slice(0, 5);
+      setRandomItems(randomSubset);
+    }
+  }, [itemsLoading, itemsData]);
 
-  ];
+  function shuffleArray(array) {
+    const newArray = [...array];
+    let currentIndex = newArray.length,
+      randomIndex;
+
+    while (currentIndex !== 0) {
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+
+      [newArray[currentIndex], newArray[randomIndex]] = [
+        newArray[randomIndex],
+        newArray[currentIndex],
+      ];
+    }
+
+    return newArray;
+  }
 
   const settings = {
     dots: false,
@@ -40,36 +45,40 @@ function ProductBar() {
   };
 
   const anchorStyle = {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'flex-start',
-    alignItems: 'center'
-  }
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "flex-start",
+    alignItems: "center",
+  };
 
   const innerDivStyle = {
     width: 150,
-    marginTop: 3
-  }
+    marginTop: 3,
+  };
 
   const priceStyle = {
     fontSize: 14,
-  }
+  };
 
   return (
     <div className="product-bar-container">
-      <Slider {...settings}>
-        {images.map((image, index) => (
-          <div key={index}>
-            <a href="#!" style={anchorStyle}>
-              <img src={image} alt={`Placeholder ${index}`} />
-              <div style={innerDivStyle}>
-                <p>Placeholder Name</p>
-                <p style={priceStyle}>$20</p>
-              </div>
-            </a>
-          </div>
-        ))}
-      </Slider>
+      {randomItem.length > 0 ? (
+        <Slider {...settings}>
+          {randomItem.map((item, index) => (
+            <div key={index}>
+              <a href="#!" style={anchorStyle}>
+                <img src={placeholderImage} alt={`Placeholder ${index}`} />
+                <div style={innerDivStyle}>
+                  <p>{item.name}</p>
+                  <p style={priceStyle}>${item.price}</p>
+                </div>
+              </a>
+            </div>
+          ))}
+        </Slider>
+      ) : (
+        <p>Loading...</p>
+      )}
     </div>
   );
 }
