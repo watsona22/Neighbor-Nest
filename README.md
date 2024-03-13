@@ -12,7 +12,6 @@ npm run seed
 3. Start the server
 ```
 npm run develop
-```
 
 ## Description
 
