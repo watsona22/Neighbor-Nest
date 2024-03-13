@@ -42,6 +42,7 @@ function PostItem() {
 
     e.target.reset();
     setPrice("");
+    window.location.reload();
   }
 
   

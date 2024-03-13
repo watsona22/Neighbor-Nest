@@ -17,19 +17,20 @@ function Header() {
   
   return (
     <div className="header-container">
-      <Link to="/">
-        <h1>NeighborNest</h1>
-      </Link>
-
-      <div className="search-container">
-        <CategoryDropDown />
-        <p>Categories</p>
-        <input
-          type="search"
-          name="search"
-          id="search"
-          placeholder="Search..."
-        />
+      <div className="left-div">
+        <Link to="/">
+          <h1>NeighborNest</h1>
+        </Link>
+        <div className="search-container">
+          <CategoryDropDown />
+          <p>Categories</p>
+          <input
+            type="search"
+            name="search"
+            id="search"
+            placeholder="Search..."
+          />
+        </div>
       </div>
       <div className="login-container">
         {!AuthService.loggedIn() ? (
