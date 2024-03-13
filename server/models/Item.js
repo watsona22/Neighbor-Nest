@@ -1,4 +1,4 @@
-import { Schema, model } from 'mongoose'
+const { Schema, model } = require('mongoose');
 
 const itemSchema = new Schema({
     name: {
@@ -13,9 +13,13 @@ const itemSchema = new Schema({
         type: String,
         required: true,
     },
-
+    category: {
+        type: Schema.Types.ObjectId,
+        ref: 'Category',
+        required: true
+    }
 });
 
 const Item = model('Item', itemSchema);
 
-export default Item
+module.exports = Item

@@ -1,37 +1,42 @@
 const express = require('express');
-const { ApolloServer } = require('apollo-server-express');
-const mongoose = require('mongoose');
+const { ApolloServer } = require('@apollo/server');
+const { expressMiddleware } = require('@apollo/server/express4');
+const path = require('path');
+const {authMiddleware} = require('./utils/auth.js');
+const { typeDefs, resolvers } = require('./schemas/index.js');
+const db = require('./config/connection.js');
 
-const typeDefs = require('./graphql/schema');
-const resolvers = require('./graphql/resolvers');
-
-// Importing Mongoose models
-const Item = require('./models/item');
-const User = require('./models/user');
-
+const PORT = process.env.PORT || 3001;
 const app = express();
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+});
 
-// Connect to MongoDB
-mongoose.connect('mongodb://localhost:27017/your-database-name', { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => console.log('MongoDB connected'))
-    .catch(err => console.error(err));
+const startApolloServer = async () => {
+  await server.start();
 
-// Provide the Mongoose models to the resolvers
-const models = {
-    Item,
-    User
+  app.use(express.urlencoded({ extended: false }));
+  app.use(express.json());
+
+  app.use('/graphql', expressMiddleware(server, {
+    context: authMiddleware
+  }));
+
+  if (process.env.NODE_ENV === 'production') {
+    app.use(express.static(path.join(__dirname, '../client/dist')));
+
+    app.get('*', (req, res) => {
+      res.sendFile(path.join(__dirname, '../client/dist/index.html'));
+    });
+  }
+
+  db.once('open', () => {
+    app.listen(PORT, () => {
+      console.log(`API server running on port ${PORT}!`);
+      console.log(`Use GraphQL at http://localhost:${PORT}/graphql`);
+    });
+  });
 };
 
-const server = new ApolloServer({
-    typeDefs,
-    resolvers,
-    context: () => ({ models }) // Provide the models to the resolvers
-});
-
-server.applyMiddleware({ app });
-
-const PORT = process.env.PORT || 4000;
-
-app.listen(PORT, () => {
-    console.log(`Server listening on port ${PORT}`);
-});
+startApolloServer();

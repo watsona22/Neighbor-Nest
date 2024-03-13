@@ -1,4 +1,6 @@
-import User from './User';
-import Item from './Item';
+const User = require('./User.js');
+const Item = require('./Item.js');
+const Category = require('./Category.js');
+const Order = require('./Order.js');
 
-export default { User, Item}
+module.exports = { User, Item, Order, Category };

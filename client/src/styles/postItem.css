@@ -1,0 +1,42 @@
+.post-item-container {
+  width: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.post-item-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+
+
+  width: 50%;
+
+  margin: 75px 0px 75px 0px;
+
+}
+
+.post-item-form label {
+  width: 200px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.post-item-form input {
+  margin: 0;
+  padding: 0;
+}
+
+.radio-category {
+  display: flex;
+}
+
+.radio-label {
+  margin-bottom: 40px;
+}
