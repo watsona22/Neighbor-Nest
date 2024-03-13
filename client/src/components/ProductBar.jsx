@@ -68,7 +68,7 @@ function ProductBar() {
             <div key={index}>
               <a href="#!" style={anchorStyle}>
                 <img src={placeholderImage} alt={`Placeholder ${index}`} />
-                <div style={innerDivStyle}>
+                <div style={innerDivStyle} className="inner-div">
                   <p>{item.name}</p>
                   <p style={priceStyle}>${item.price}</p>
                 </div>
