@@ -41,9 +41,8 @@ NeighborNest can be used to browse items for sale. As an account holder, users c
 
 The following links to our deployed application:
 
-    ![Deployed Website](assets/homepage.png)
+![Website](assets/homepage.png)
    
-
 ## Contributors
 
 <ul>
