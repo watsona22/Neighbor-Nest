@@ -1,0 +1,6 @@
+@media (max-width: 968px) {
+    .product-bar-container {
+        display: flex;
+        flex-basis: content;
+    }
+}
