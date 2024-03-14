@@ -43,7 +43,7 @@ The following links to our deployed application:
 
 
     ```md
-    ![Deployed Website](client/src/assets/homepage.png)
+    ![Deployed Website](src/assets/homepage.png)
     ```
 
 ## Contributors
