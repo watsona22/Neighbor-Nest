@@ -40,7 +40,7 @@ NeighborNest can be used to browse items for sale. As an account holder, users c
 <li>Purchase listed items.</li>
 </ul>
 
-The following links to our deployed application:
+The following links to our deployed application: https://neighbor-nest.onrender.com/
 
 ![Deployed Website](client/src/assets/homepage.png)
    
