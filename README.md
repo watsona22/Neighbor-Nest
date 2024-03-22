@@ -21,6 +21,7 @@ The application backend uses Express.js and Apollo Server to mediate requests fr
 
 Our acceptance criteria were as follows: 
 
+## Acceptance Criteria
 GIVEN an e-commerce application
 WHEN the NeighborNest website loads,
 THEN the user is presented with a landing page. The landing page will have options to login or signup, browse categories and search by keyword.
