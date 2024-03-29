@@ -22,6 +22,7 @@ The application backend uses Express.js and Apollo Server to mediate requests fr
 Our acceptance criteria were as follows: 
 
 ## Acceptance Criteria
+``
 GIVEN an e-commerce application
 WHEN the NeighborNest website loads,
 THEN the user is presented with a landing page. The landing page will have options to login or signup, browse categories and search by keyword.
@@ -29,7 +30,7 @@ WHEN a public user views the page,
 THEN he will have the option to sort and view items by category.
 WHEN a user is logged in,
 THEN he will have the option to buy and sell items, as well as create an order for checkout.
-
+``
 ## Usage
 
 NeighborNest can be used to browse items for sale. As an account holder, users can post items for sale and purchase through our checkout cart.
